@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CommuteMate.AI/CommuteMate.AI.csproj" />
+    <Project Path="src/CommuteMate.API/CommuteMate.API.csproj" />
+    <Project Path="src/CommuteMate.Core/CommuteMate.Core.csproj" />
+    <Project Path="src/CommuteMate.Data/CommuteMate.Data.csproj" />
+    <Project Path="src/CommuteMate.Services/CommuteMate.Services.csproj" />
+  </Folder>
+</Solution>

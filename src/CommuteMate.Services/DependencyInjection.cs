@@ -1,0 +1,25 @@
+using CommuteMate.Core.Settings;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CommuteMate.Services;
+
+/// <summary>
+/// Registers service-layer dependencies into the DI container.
+/// Call <c>builder.Services.AddApplicationServices()</c> from the API startup.
+/// </summary>
+public static class DependencyInjection
+{
+    /// <summary>
+    /// Adds application/service layer registrations. Keep registrations small and focused here.
+    /// </summary>
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
+    {
+        // Register service layer implementations here.
+        services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
+        services.AddScoped<CommuteMate.Core.Interfaces.IAuthService, AuthService>();
+        services.AddSingleton<CommuteMate.Core.Interfaces.ITokenService, TokenService>();
+
+        return services;
+    }
+}
