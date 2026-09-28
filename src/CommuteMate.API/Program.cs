@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using CommuteMate.Data;
 using CommuteMate.Core.Settings;
 using CommuteMate.Services;
+using CommuteMate.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -142,22 +143,8 @@ var app = builder.Build();
 // Exception Handling
 // ------------------------------------
 
-app.UseExceptionHandler(a => a.Run(async context =>
-{
-    var feature =
-        context.Features.Get<IExceptionHandlerPathFeature>();
-
-    var ex = feature?.Error;
-
-    context.Response.StatusCode = 500;
-
-    await context.Response.WriteAsJsonAsync(
-        new
-        {
-            error = ex?.Message ?? "An error occurred"
-        });
-}));
-
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 // ------------------------------------
 // Swagger
