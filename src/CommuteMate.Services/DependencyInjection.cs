@@ -1,4 +1,7 @@
+using CommuteMate.Core.Interfaces;
 using CommuteMate.Core.Settings;
+using CommuteMate.Data.Repositories;
+using CommuteMate.Services.Vehicles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,6 +22,11 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
         services.AddScoped<CommuteMate.Core.Interfaces.IAuthService, AuthService>();
         services.AddSingleton<CommuteMate.Core.Interfaces.ITokenService, TokenService>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IRideRepository, RideRepository>();
+        services.AddScoped<IVehicleService, VehicleService>();
+        services.AddScoped<IRideService, Rides.RideService>();
+
 
         return services;
     }
