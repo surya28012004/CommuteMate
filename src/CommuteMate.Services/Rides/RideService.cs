@@ -72,6 +72,31 @@ namespace CommuteMate.Services.Rides
             var rides = await _rideRepository.GetByPublisherAsync(userId, ct);
             return rides.Select(MapToResponse).ToList();
         }
+        public async Task<List<SearchRidesResponse>> SearchAsync(SearchRidesRequest request, int userId, CancellationToken ct)
+        {
+            var rides = await _rideRepository.SearchRidesAsync(request, userId, ct);
+            return rides.Select(r => new SearchRidesResponse
+            {
+                RideId = r.Id,
+                FromCity = r.FromCity,
+                ToCity = r.ToCity,
+                FromArea = r.FromArea ?? string.Empty,
+                ToArea = r.ToArea ?? string.Empty,
+                RideDate = r.RideDate,
+                RideTime = r.RideTime,
+                AvailableSeats = r.AvailableSeats,
+                PricePerSeat = r.PricePerSeat,
+                isRecurring = r.IsRecurring,
+        
+                Note = r.Notes ?? string.Empty,
+                PublisherName = r.Publisher.FullName,
+                publisherRating = r.Publisher.AverageRating, // Placeholder for actual rating logic
+                publishertotalrides = r.Publisher.TotalRides, // Placeholder for actual total rides logic
+                VehicleModel = r.Vehicle.Model,
+                VehicleColor = r.Vehicle.Color,
+                vehicletype = r.Vehicle.Type.ToString()
+            }).ToList();
+        }
 
         private static RideResponse MapToResponse(Ride ride)
         {

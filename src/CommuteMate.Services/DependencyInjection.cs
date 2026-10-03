@@ -1,6 +1,7 @@
 using CommuteMate.Core.Interfaces;
 using CommuteMate.Core.Settings;
 using CommuteMate.Data.Repositories;
+using CommuteMate.Services.Bookings;
 using CommuteMate.Services.Vehicles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,8 @@ public static class DependencyInjection
         services.AddScoped<IRideRepository, RideRepository>();
         services.AddScoped<IVehicleService, VehicleService>();
         services.AddScoped<IRideService, Rides.RideService>();
-
+        services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<IBookingService, BookingService>();
 
         return services;
     }

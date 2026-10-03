@@ -29,6 +29,12 @@ namespace CommuteMate.API.Controllers
             var rides = await _rideService.GetMyRidesAsync(User.GetUserId(), ct);
             return Ok(rides);
         }
-
+        //[FromQuery] tells ASP .NET Core to bind the query parameters from the URL to the properties of the SearchRidesRequest object. This allows you to pass search criteria as query parameters in the request URL, and they will be automatically mapped to the corresponding properties of the SearchRidesRequest object.
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] SearchRidesRequest request, CancellationToken ct)
+        {
+            var rides = await _rideService.SearchAsync(request, User.GetUserId(), ct);
+            return Ok(rides);
+        }
     }
 }
