@@ -29,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<IRideService, Rides.RideService>();
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IBookingService, BookingService>();
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
+        services.AddScoped<IDashboardService, DashboardService>();
 
         return services;
     }

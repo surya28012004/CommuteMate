@@ -17,5 +17,8 @@ namespace CommuteMate.Core.Interfaces
         Task<List<Booking>> GetBookingsAsync(int passengerId, CancellationToken ct);
 
         Task<Booking?> GetByIdForUserAsync(int bookingId,int passengerId, CancellationToken ct);
+        Task<int> GetCompletedRideCountBetweenUsersAsync(int passengerId, int publisherId,CancellationToken ct);
+
+        Task<decimal> GetDiscountPercentAsync(int passengerId,int publisherId,CancellationToken ct);
     }
 }

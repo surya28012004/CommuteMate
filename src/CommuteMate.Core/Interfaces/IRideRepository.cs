@@ -14,5 +14,7 @@ namespace CommuteMate.Core.Interfaces
         //don't show the searcher their own rides in the search results
         Task<List<Ride>> SearchRidesAsync(SearchRidesRequest request,int excludeUserId, CancellationToken ct);
         Task<Ride?> GetByIdAsync(int rideId, CancellationToken ct);
+
+        Task CompleteRideAsync(int rideId, CancellationToken ct);
     }
 }

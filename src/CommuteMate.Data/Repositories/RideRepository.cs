@@ -1,5 +1,6 @@
 ﻿using CommuteMate.Core.DTOs;
 using CommuteMate.Core.Entities;
+using CommuteMate.Core.Enums;
 using CommuteMate.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -69,6 +70,34 @@ namespace CommuteMate.Data.Repositories
                 .Include(r => r.Publisher)
                 .Include(r => r.Vehicle)
                 .FirstOrDefaultAsync(r => r.Id == rideId, ct);
+        }
+        public async Task CompleteRideAsync(int rideId, CancellationToken ct)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync(ct);
+            var passengerIds= await _context.Bookings.Where(b => b.RideId == rideId && b.Status == BookingStatus.Confirmed)
+                .Select(b => b.PassengerId)
+                .ToListAsync(ct);
+
+            await _context.Rides
+                .Where(r => r.Id == rideId)
+                .ExecuteUpdateAsync(r => r.SetProperty(r => r.Status, RideStatus.Completed), ct);
+            await _context.Bookings
+                .Where(b => b.RideId == rideId && b.Status == BookingStatus.Confirmed)
+                .ExecuteUpdateAsync(b => b.SetProperty(b => b.Status, BookingStatus.Completed), ct);
+            var publisherId = await _context.Rides
+                .Where(r => r.Id == rideId)
+                .Select(r => r.PublisherId)
+                .FirstOrDefaultAsync(ct);
+            await _context.Users
+                .Where(u => u.Id == publisherId)
+                .ExecuteUpdateAsync(u => u.SetProperty(u => u.TotalRides, u => u.TotalRides + 1), ct);
+            if(passengerIds.Count>0)
+            {
+                await _context.Users
+                    .Where(u => passengerIds.Contains(u.Id))
+                    .ExecuteUpdateAsync(u => u.SetProperty(u => u.TotalRides, u => u.TotalRides + 1), ct);
+            }
+            await transaction.CommitAsync(ct);
         }
     }
 }

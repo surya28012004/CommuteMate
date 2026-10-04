@@ -74,6 +74,28 @@ namespace CommuteMate.Data.Repositories
                 .AnyAsync(b => b.RideId == rideId && b.PassengerId == passengerId && b.Status == BookingStatus.Confirmed, ct);
         }
 
-        
+        public async Task<int> GetCompletedRideCountBetweenUsersAsync(int passengerId,int publisherId,CancellationToken ct)
+        {
+            var rideCount = await _context.Database
+                .SqlQuery<int>($"""
+            SELECT dbo.fn_GetRideCountBetweenUsers({passengerId}, {publisherId}) AS [Value]
+            """)
+                .SingleAsync(ct);
+
+            return rideCount;
+        }
+
+        public async Task<decimal> GetDiscountPercentAsync(int passengerId,int publisherId,CancellationToken ct)
+        {
+            var discountPercent = await _context.Database
+                .SqlQuery<decimal>($"""
+            SELECT CAST(dbo.fn_CalculateDiscount({passengerId}, {publisherId}) AS decimal(5,2)) AS [Value]
+            """)
+                .SingleAsync(ct);
+
+            return discountPercent;
+        }
+
+
     }
 }

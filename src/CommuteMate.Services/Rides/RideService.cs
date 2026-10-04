@@ -116,5 +116,17 @@ namespace CommuteMate.Services.Rides
                 Note = ride.Notes ?? string.Empty
             };
         }
+        public async Task CompleteAsync(int rideId, int userId, CancellationToken ct)
+        {
+            var ride = await _rideRepository.GetByIdAsync(rideId, ct);
+            if (ride == null)
+                throw new InvalidOperationException("Ride not found.");
+            if (ride.PublisherId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to complete this ride.");
+            if (ride.Status == Core.Enums.RideStatus.Completed)
+                throw new InvalidOperationException("Ride is already completed.");
+            await _rideRepository.CompleteRideAsync(rideId, ct);
+            await _rideRepository.SaveChangesAsync(ct);
+        }
     }
 }

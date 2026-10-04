@@ -17,6 +17,8 @@ namespace CommuteMate.Data
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<Notification> Notifications => Set<Notification>();
         public DbSet<CityDistance> CityDistances => Set<CityDistance>();
+        public DbSet<UserActivitySummary> UserActivitySummaries => Set<UserActivitySummary>();
+        public DbSet<UserRecentActivity> UserRecentActivities => Set<UserRecentActivity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

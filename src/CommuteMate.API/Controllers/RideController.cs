@@ -36,5 +36,11 @@ namespace CommuteMate.API.Controllers
             var rides = await _rideService.SearchAsync(request, User.GetUserId(), ct);
             return Ok(rides);
         }
+        [HttpPut("{id:int}/complete")]
+        public async Task<IActionResult> Complete(int id, CancellationToken ct)
+        {
+            await _rideService.CompleteAsync(id, User.GetUserId(), ct);
+            return Ok(new { message = "Ride completed successfully." });
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace CommuteMate.Core.Interfaces
         Task<RideResponse> CreateRideAsync(CreateRideRequest request, int userId, CancellationToken ct);
         Task<List<RideResponse>> GetMyRidesAsync(int userId, CancellationToken ct);
         Task<List<SearchRidesResponse>> SearchAsync(SearchRidesRequest request, int userId, CancellationToken ct);
+        Task CompleteAsync(int rideId, int userId, CancellationToken ct);
     }
 }
