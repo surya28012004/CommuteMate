@@ -20,5 +20,6 @@ namespace CommuteMate.Core.Interfaces
         Task<int> GetCompletedRideCountBetweenUsersAsync(int passengerId, int publisherId,CancellationToken ct);
 
         Task<decimal> GetDiscountPercentAsync(int passengerId,int publisherId,CancellationToken ct);
+
     }
 }

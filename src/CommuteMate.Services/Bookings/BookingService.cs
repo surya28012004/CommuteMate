@@ -38,13 +38,21 @@ namespace CommuteMate.Services.Bookings
             {
                 throw new Exception("You cannot book a ride that has already started.");
             }
+            if(await _bookingRepository.HasActiveBookingAsync(request.RideId, userId, ct))
+            {
+                throw new Exception("You have already booked this ride.");
+            }
+            var discountpercent=await _bookingRepository.GetDiscountPercentAsync(userId,ride.PublisherId, ct);
+            var baseprice= request.SeatsBooked * ride.PricePerSeat;
+            var totalprice = baseprice - (baseprice * discountpercent / 100);
+
             var booking = new Booking
             {
                 RideId = ride.Id,
                 PassengerId = userId,
                 SeatsBooked = request.SeatsBooked,
-                TotalPrice = request.SeatsBooked * ride.PricePerSeat,
-                DiscountAppliedPercent = 0, // Assuming no discount logic for now
+                TotalPrice = totalprice,
+                DiscountAppliedPercent = discountpercent,
                 BookedAtUtc = DateTime.UtcNow,
                 Status = BookingStatus.Confirmed
 
